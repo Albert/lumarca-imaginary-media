@@ -22,23 +22,20 @@ void setup() {
   unitsPerStringNear = renderField.x / float(numOfStrings);
   unitsPerStringFar = unitsPerStringNear * (farPlane / nearPlane);
 
-  float thresh = 1.0;
+  float thresh = 1.8;
   for (int i = 0; i < numOfStrings; i++) {
     boolean findNewPotential = true;
     PVector potentialPoint = getPoint(i);
     while(findNewPotential) {
+      findNewPotential = false;
       potentialPoint = getPoint(i);
-      boolean tripped = false;
       for(int j = 0; j < i; j++) {
-        if(potentialPoint.dist(strings[i]) < thresh) {
-          tripped = true;
+        if(potentialPoint.dist(strings[j]) < thresh) {
+          findNewPotential = true;
         }
       }
-      if (tripped) {
-        findNewPotential = false;
-      }
     }
-    strings[i] = thePoint;
+    strings[i] = potentialPoint;
   }
 }
 
