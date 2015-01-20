@@ -22,13 +22,32 @@ void setup() {
   unitsPerStringNear = renderField.x / float(numOfStrings);
   unitsPerStringFar = unitsPerStringNear * (farPlane / nearPlane);
 
+  float thresh = 1.0;
   for (int i = 0; i < numOfStrings; i++) {
-    float depth = getWeightedRandom();
-    float nearPlaneXOffset = -(renderField.x / 2) + (float(i) * unitsPerStringNear);
-    float xLocation = (depth + nearPlane) * (nearPlaneXOffset / nearPlane);
-    
-    strings[i] = new PVector(xLocation, depth);
+    boolean findNewPotential = true;
+    PVector potentialPoint = getPoint(i);
+    while(findNewPotential) {
+      potentialPoint = getPoint(i);
+      boolean tripped = false;
+      for(int j = 0; j < i; j++) {
+        if(potentialPoint.dist(strings[i]) < thresh) {
+          tripped = true;
+        }
+      }
+      if (tripped) {
+        findNewPotential = false;
+      }
+    }
+    strings[i] = thePoint;
   }
+}
+
+PVector getPoint(int i) {
+  float depth = getWeightedRandom();
+  float nearPlaneXOffset = -(renderField.x / 2) + (float(i) * unitsPerStringNear);
+  float xLocation = (depth + nearPlane) * (nearPlaneXOffset / nearPlane);
+  PVector point = new PVector(xLocation, depth);
+  return point;
 }
 
 void draw() {
