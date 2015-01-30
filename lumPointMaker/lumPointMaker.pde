@@ -22,17 +22,65 @@ void setup() {
   unitsPerStringNear = renderField.x / float(numOfStrings);
   unitsPerStringFar = unitsPerStringNear * (farPlane / nearPlane);
 
-  float thresh = 1.8;
+  //makePoints(2.125);
+  makePoints(1.9);
+  savePoints();
+}
+
+void savePoints() {
+  String[] output = new String[numOfStrings];
+  for (int i = 0; i < numOfStrings; i++) {
+    PVector string = strings[i];
+    output[i] = str(string.x) + " " + str(string.y);
+  }
+  println(strings[0].x);
+  println(strings[0].y);
+  saveStrings("lines.txt", output);
+  //saveStrings("lines.txt", strings); // hehe, funny that saveStrings is a native function meaning save "String"s
+}
+
+void makePoints(float thresh) {
+  int counterForThree = 0;
+  int counterForSeven = 0;
+  int counterForFifteen = 0;
   for (int i = 0; i < numOfStrings; i++) {
     boolean findNewPotential = true;
     PVector potentialPoint = getPoint(i);
     while(findNewPotential) {
+      counterForThree++;
       findNewPotential = false;
       potentialPoint = getPoint(i);
       for(int j = 0; j < i; j++) {
         if(potentialPoint.dist(strings[j]) < thresh) {
           findNewPotential = true;
         }
+      }
+      if (counterForThree > 200) {
+        counterForThree = 0;
+        counterForSeven++;
+        i = i - 3;
+        if (i < 0) {
+          i = 0;
+        }
+      }
+
+      if (counterForSeven > 200) {
+        counterForSeven = 0;
+        counterForFifteen++;
+        i = i - 7;
+        if (i < 0) {
+          i = 0;
+        }
+      }
+
+      if (counterForFifteen > 200) {
+        counterForFifteen = 0;
+        i = i - 15;
+        if (i < 0) {
+          i = 0;
+        }
+        println("for Fifteen");
+        println(i);
       }
     }
     strings[i] = potentialPoint;
