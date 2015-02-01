@@ -12,7 +12,7 @@ float unitsPerStringFar;
 
 void setup() {
   size(1024, 768);
-  numOfStrings = 85;
+  numOfStrings = 102;
   strings = new PVector[numOfStrings];
   renderField = new PVector(17.0, 16.0);
   farPlane = 39.0;
@@ -22,19 +22,25 @@ void setup() {
   unitsPerStringNear = renderField.x / float(numOfStrings);
   unitsPerStringFar = unitsPerStringNear * (farPlane / nearPlane);
 
-  //makePoints(2.125);
-  makePoints(1.9);
-  savePoints();
-}
-
-void savePoints() {
   String[] output = new String[numOfStrings];
-  for (int i = 0; i < numOfStrings; i++) {
-    PVector string = strings[i];
-    output[i] = str(string.x) + " " + str(string.y);
+
+  int outCount = 9999;
+  while (outCount > 22) {
+    outCount = 0;
+    //makePoints(2.125);
+    //makePoints(1.925);
+    makePoints(1.8);
+
+    for (int i = 0; i < numOfStrings; i++) {
+      PVector string = strings[i];
+      output[i] = str(string.x) + " " + str(string.y);
+      if (string.x < -renderField.x / 2 || string.x > renderField.x / 2) {
+        outCount ++;
+      }
+    }
+    //println(outCount);
   }
-  println(strings[0].x);
-  println(strings[0].y);
+
   saveStrings("lines.txt", output);
   //saveStrings("lines.txt", strings); // hehe, funny that saveStrings is a native function meaning save "String"s
 }
